@@ -1,0 +1,68 @@
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
+import java.sql.*;
+
+public class topProducts extends JPanel {
+
+    topProducts() {
+        final String DB_URL = "jdbc:mysql://localhost:3306/sales";
+        final String DB_USER = "root";
+        final String DB_PASS = "admin";
+        JTable table;
+        DefaultTableModel model;
+        model = new DefaultTableModel(new String[]{"ID", "Product Name", "Price", "Sold Today"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        //JLabel topProductsSales = new JLabel("Top Products Sales");
+
+
+
+
+        model.setRowCount(0);
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM dash_sales")) {
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                        rs.getInt("id"),
+                        rs.getString("product_name"),
+                        "₱" + rs.getInt("price"),
+                        rs.getInt("sold")
+
+                });
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
+        table.getTableHeader().setBackground(new Color(90, 191, 108));
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setBackground(new Color(255, 255, 255));
+        table.setCellSelectionEnabled(true);
+        table.setSelectionBackground(new Color(0, 123, 255));
+        table.setSelectionForeground(Color.WHITE);
+
+
+        //JPanel panel = new JPanel();
+        //panel.setLayout(new BorderLayout());
+        //panel.add(topProductsSales);
+        //panel.setPreferredSize(new Dimension(100, 50));
+        //this.add(panel, BorderLayout.NORTH);
+        this.setBackground(new Color(255, 255, 255));
+        this.setPreferredSize(new Dimension(300, 300));
+        this.setLayout(new BorderLayout());
+        this.add(scrollPane);
+
+
+    }
+}
