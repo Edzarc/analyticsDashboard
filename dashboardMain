@@ -1,0 +1,22 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class dashboardMain extends JFrame {
+    public dashboardMain() {
+        this.setTitle("Dashboard");
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setSize(800, 600);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setLocationRelativeTo(null);
+        this.setLayout(new FlowLayout(FlowLayout.LEADING));
+        this.add(new topProducts(), BorderLayout.WEST);
+        this.getContentPane().setBackground(new Color(255, 255, 255));
+        //this.pack();
+        this.setVisible(true);
+        //this.add(new barChart());
+
+
+
+
+    }
+}
